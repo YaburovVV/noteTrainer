@@ -1,7 +1,17 @@
 #!/usr/bin/env python3
 import random
 import numpy as np
+import sys
+from enum import Enum
 
+
+class Clef(Enum):
+    g = u'\U0001D11E'
+    f = u'\U0001D122'
+
+
+note_sign = u'\u266A'
+key_pointer_sign = '^'
 strings = '''           {19}
         ---{18}---
            {17}
@@ -11,7 +21,7 @@ strings = '''           {19}
            {13}
     -------{12}-------
            {11}
-    -------{10}-------
+{0}   -------{10}-------
            {9}
     -------{8}-------
            {7}
@@ -39,49 +49,58 @@ notes = [
     ["до", 1],
 ]
 
-notesSK = (
-    ["ре", 19],
-    ["до", 18],
-    ["си", 17],
-    ["ля", 16],
-    ["соль", 15],
-    ["фа", 14],
-    ["ми", 13],
-    ["ре", 12],
-    ["до", 11],
-    ["си", 10],
-    ["ля", 9],
-    ["соль", 8],
-    ["фа", 7],
-    ["ми", 6],
-    ["ре", 5],
-    ["до", 4],
-    ["си", 3],
-    ["ля", 2],
-    ["соль", 1],
+notesGF = (
+    ["ре", 19, "фа"],
+    ["до", 18, "ми"],
+    ["си", 17, "ре"],
+    ["ля", 16, "до"],
+    ["соль", 15, "си"],
+    ["фа", 14, "ля"],
+    ["ми", 13, "соль"],
+    ["ре", 12, "фа"],
+    ["до", 11, "ми"],
+    ["си", 10, "ре"],
+    ["ля", 9, "до"],
+    ["соль", 8, "си"],
+    ["фа", 7, "ля"],
+    ["ми", 6, "cоль"],
+    ["ре", 5, "фа"],
+    ["до", 4, "ми"],
+    ["си", 3, "ре"],
+    ["ля", 2, "до"],
+    ["соль", 1, "си"],
 )
 
 
-def print_notes(note):
+def print_notes(note, clef):
+    if clef == Clef.g:
+        clef_column = 0
+    elif clef == Clef.f:
+        clef_column = 2
+    else:
+        sys.exit()
+
     note_pos = np.full((20), ' ')
-    note_pos[note[1]] = u'\u266A'
+    note_pos[0] = clef.value
+    note_pos[note[1]] = note_sign
 
     keys_pos = np.full((8), '')
 
+    print(note, note[clef_column])
     for item in notes:
-        if item[0] == note[0]:
-            keys_pos[item[1]] = '^'
+        if item[0] == note[clef_column]:
+            keys_pos[item[1]] = key_pointer_sign
 
     print(strings.format(*note_pos))
     num = input("")
     note_pos[note[1]] = note[0]
     print(keys.format(*keys_pos))
-    if num == note[0]:
+    if num == note[clef_column]:
         print("\n ====== Верно ==================")
     else:
         print("\n !!!! не '{0}', а '{1}' !!!!!!".format(num, note[0]))
 
 
 while 1 < 2:
-    one = random.choice(notesSK)
-    print_notes(one)
+    one = random.choice(notesGF)
+    print_notes(one, Clef.f)
