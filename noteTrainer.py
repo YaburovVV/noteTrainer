@@ -80,11 +80,11 @@ def print_notes(note, clef):
     else:
         sys.exit()
 
-    note_pos = np.full((20), ' ')
+    note_pos = np.full(20, ' ')
     note_pos[0] = clef.value
     note_pos[note[1]] = note_sign
 
-    keys_pos = np.full((8), '')
+    keys_pos = np.full(8, '')
 
     for item in notes:
         if item[0] == note[clef_column]:
